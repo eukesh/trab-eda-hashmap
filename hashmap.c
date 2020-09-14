@@ -18,3 +18,27 @@ unsigned long elf_hash(const char *s) {
 
   return h;
 }
+//Ht_item
+struct item{
+  char* key;
+  char* value;
+};
+//HashTable | size
+struct hashmap{
+  item** items;
+  int capacity;
+  int count;
+};
+
+hashmap *hashmap_create(int capacity){
+  hashmap* table = (hashmap*) malloc (sizeof(hashmap));
+  table->capacity = capacity;
+  table->count = 0;
+  table->items = (item**) calloc (table->capacity, sizeof(item*));
+  for (int i=0; i<table->capacity; i++)
+      table->items[i] = NULL;
+
+  return table;
+
+}
+
