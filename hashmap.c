@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hashmap.h"
-
+//
 struct node{
     char key;
     int value;
