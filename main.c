@@ -11,7 +11,7 @@ int main() {
     "sit",
     "amet"
   };
-  //teste branch
+  //teste 
   // Calcula quantidade de strings acima...
   const int length = sizeof vector / sizeof *vector;
 
