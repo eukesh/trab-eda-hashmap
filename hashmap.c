@@ -12,7 +12,7 @@ struct hashmap{
     int capacity;
     struct node **list;
 }hashmap;
-
+//
 struct hashmap *hashmap_create(int capacity){
     struct hashmap *t = (struct hashmap*)malloc(sizeof(struct hashmap));
     t->capacity = capacity;
