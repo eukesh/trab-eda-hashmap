@@ -27,10 +27,7 @@ int main() {
   
   printf("\n");
 
-  struct hashmap *v = hashmap_create(5);
 
-  //insercao
-  hashmap_set(v,vector[0],1);
   
 
   //
