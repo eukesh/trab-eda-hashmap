@@ -1,7 +1,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hashmap.h"
+/*
 
+
+
+
+
+
+*/
 /**
  * Função padronizada para calcular o hash de uma string.
  */
