@@ -1,14 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "hashmap.h"
-/*
 
-
-
-
-
-
-*/
 int main() {
   // Algumas strings para testarmos...
   const char *vector[] = {

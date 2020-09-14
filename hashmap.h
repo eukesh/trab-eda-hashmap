@@ -1,13 +1,6 @@
 #pragma once
 #include <stdbool.h>
-/*
 
-
-
-
-
-
-*/
 typedef struct item item;
 typedef struct hashmap hashmap;
 

@@ -1,5 +1,5 @@
 # Estrutura de Dados - Trabalho Final
-
+  
 O aluno deve implementar um tipo de dados abstrato para uma [tabela hash](https://en.wikipedia.org/wiki/Hash_table) (também conhecido como dicionário). Conforme visto em sala, tabelas hash são estruturas de dados associativas, isto é, associam uma chave a um valor, com busca, inserção e remoção eficientes (com o melhor tempo constante).
 
 ## Implementação
