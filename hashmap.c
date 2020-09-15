@@ -22,7 +22,7 @@ unsigned long elf_hash(const char *s) {
 //Ht_item
 struct item{
   char* key;
-  char* value;
+  int value;
 };
 //HashTable | size
 struct hashmap{
@@ -32,14 +32,34 @@ struct hashmap{
 };
 
 hashmap *hashmap_create(int capacity){
-  hashmap* table = (hashmap*) malloc (sizeof(hashmap));
-  table->capacity = capacity;
-  table->count = 0;
-  table->items = (item**) calloc (table->capacity, sizeof(item*));
-  for (int i=0; i<table->capacity; i++)
-      table->items[i] = NULL;
+  hashmap* map = (hashmap*) malloc (sizeof(hashmap));
+  map->capacity = capacity;
+  map->count = 0;
+  map->items = (item**) calloc (map->capacity, sizeof(item*));
+  for (int i=0; i<map->capacity; i++)
+      map->items[i] = NULL;
 
-  return table;
+  return map;
+
+}
+
+void hashmap_set(hashmap *map, const char *key, int value){
+    
+    //criar item na tabela
+    item* new_item = (item*) malloc (sizeof(item));
+    new_item->key = (char*) malloc(strlen(key) +1);
+    new_item->value = (int) malloc(value +1);
+
+    strcpy(new_item->key,key);
+    new_item->value = value;
+    
+    //criar hash do item
+    int hash = elf_hash(key);
+
+    //adicionando item
+    item* item_actual = map->items[hash];
+    map->items[hash] = new_item;
+    map->count++;
 
 }
 
