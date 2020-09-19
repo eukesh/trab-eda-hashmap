@@ -5,9 +5,9 @@
 typedef struct item item;
 typedef struct hashmap hashmap;
 
-hashmap *hashmap_create(int capacity);
+hashmap *hashmap_create(int );
 
-void hashmap_set(hashmap *map, const char *key, int value);
+void hashmap_set(hashmap *, const char *, int );
 
 unsigned long elf_hash(const char *);
 
