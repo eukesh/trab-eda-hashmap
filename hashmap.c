@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "hashmap.h"
 
@@ -20,19 +21,19 @@ unsigned long elf_hash(const char *s) {
   return h;
 }
 //Ht_item
-struct item{
+typedef struct item{
   char* key;
   int value;
   struct item *next;
   struct item *prev;
-} item;
-};
+}item;
+
 //HashTable | size
-struct hashmap{
-  item** items;
+typedef struct hashmap{
+  item **items;
   int capacity;
   int count;
-};
+}hashmap;
 
 hashmap *hashmap_create(int capacity){
   if(capacity<1){
@@ -54,30 +55,49 @@ void hashmap_set(hashmap *map, const char *key, int value){
     item* new_item = (item*) malloc (sizeof(item));
     new_item->key = (char*) malloc(strlen(key) +1);
     new_item->value = (int) malloc(value +1);
- 
-    item* item_actual = map->items[hash];
-     
-    if (item_actual == NULL) {
+    
+    strcpy(new_item->key, key);
+    new_item->value = value;
+    
+    int index = elf_hash(key) % map->capacity;
+    
+    if ((map->items[index]) == NULL) {
         //key nao existe
+        
         if (map->count == map->capacity) {
             //tabela cheia
             printf("Tabela cheia\n");
             return;
         }
-         
+        
         //adicionando item
-        map->items[hash] = new_item; 
+        map->items[index] = new_item; 
         map->count++;
+        
     }else {
         //atualizar valor
-        if (strcmp(item_actual->key, key) == 0) {
-            strcpy(map->items[hash]->value, value);
+        if (strcmp(map->items[index]->key, key) == 0) {
+            map->items[index]->value = value;
             return;
         }else{
             //colisão tratar mais tarde
-            colision(map, item);
+            
             return;
         }
     }
+  
 }
 
+int hashmap_get(hashmap *map, const char *key){
+  int hash = elf_hash(key) % map->capacity;
+
+  item* item =map->items[hash];
+
+  if(item != NULL){
+    if(strcmp(item->key, key)==0){
+      return item->value;
+    }
+  }
+  return 0;
+
+}
