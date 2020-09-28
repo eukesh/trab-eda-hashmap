@@ -7,6 +7,7 @@ unsigned long elf_hash(const char *);
 
 typedef struct item item;
 typedef struct hashmap hashmap;
+typedef struct lista_linkada lista_linkada;
 
 hashmap *hashmap_create(int );
 

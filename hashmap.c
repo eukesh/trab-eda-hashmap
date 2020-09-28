@@ -7,7 +7,7 @@
 /**
  * Função padronizada para calcular o hash de uma string.
  */
-unsigned long elf_hash(const char *s) {
+unsigned long elf_hash(const char *s){
   unsigned long h = 0;
   for(int i = 0; i < strlen(s); i++) {
     h = (h << 4) + s[i];
@@ -20,20 +20,22 @@ unsigned long elf_hash(const char *s) {
 
   return h;
 }
-//Ht_item
+
 typedef struct item{
-  char* key;
+  char *key;
   int value;
-  struct item *next;
-  struct item *prev;
 }item;
 
-//HashTable | size
 typedef struct hashmap{
-  item **items;
+  lista_linkada** lista;
   int capacity;
   int count;
 }hashmap;
+
+typedef struct lista_linkada{
+  item* item;
+  lista_linkada* next;
+}lista_linkada;
 
 hashmap *hashmap_create(int capacity){
   if(capacity<1){
@@ -42,9 +44,10 @@ hashmap *hashmap_create(int capacity){
     hashmap* map = (hashmap*) malloc (sizeof(hashmap));
     map->capacity = capacity;
     map->count = 0;
-    map->items = (item**) calloc (map->capacity, sizeof(item*));
+    map->lista = (lista_linkada**) calloc (map->capacity, sizeof(lista_linkada*));
+    
     for (int i=0; i<map->capacity; i++){
-      map->items[i] = NULL;
+      map->lista[i] = NULL;
     }
     return map;
     }
@@ -52,16 +55,18 @@ hashmap *hashmap_create(int capacity){
 
 void hashmap_set(hashmap *map, const char *key, int value){
     //criar item na tabela
-    item* new_item = (item*) malloc (sizeof(item));
-    new_item->key = (char*) malloc(strlen(key) +1);
-    new_item->value = (int) malloc(value +1);
+    lista_linkada* new_item = (lista_linkada*) malloc (sizeof(lista_linkada));
+    new_item->item = (item*) malloc (sizeof(item));
+    new_item->next = NULL;
+    new_item->item->key = (char*) malloc(strlen(key) +1);
+    new_item->item->value = (int) malloc(value +1);
     
-    strcpy(new_item->key, key);
-    new_item->value = value;
+    strcpy(new_item->item->key, key);
+    new_item->item->value = value;
     
     int index = elf_hash(key) % map->capacity;
     
-    if ((map->items[index]) == NULL) {
+    if ((map->lista[index]) == NULL) {
         //key nao existe
         
         if (map->count == map->capacity) {
@@ -71,18 +76,18 @@ void hashmap_set(hashmap *map, const char *key, int value){
         }
         
         //adicionando item
-        map->items[index] = new_item; 
+        map->lista[index] = new_item; 
         map->count++;
         
     }else {
         //atualizar valor
-        if (strcmp(map->items[index]->key, key) == 0) {
-            map->items[index]->value = value;
+        if (strcmp(map->lista[index]->item->key, key) == 0) {
+            map->lista[index]->item->value = value;
             return;
         }else{
-            //colisão tratar mais tarde
+          //colisao, tratar lista linkada
             
-            return;
+          return;
         }
     }
   
@@ -91,11 +96,11 @@ void hashmap_set(hashmap *map, const char *key, int value){
 int hashmap_get(hashmap *map, const char *key){
   int index = elf_hash(key) % map->capacity;
 
-  item* item = map->items[index];
+  lista_linkada* search = map->lista[index];
 
-  if(item != NULL){
-    if(strcmp(item->key, key)==0){
-      return item->value;
+  if(search != NULL){
+    if(strcmp(search->item->key, key)==0){
+      return search->item->value;
     }
   }
   return 0;
@@ -105,42 +110,36 @@ int hashmap_get(hashmap *map, const char *key){
 void hashmap_remove(hashmap *map, const char *key){
   int index = elf_hash(key) % map->capacity;
 
-  if(map->items[index] != NULL){
-    if(strcmp(map->items[index]->key, key)==0){
-      free(map->items[index]->key);
-      free(map->items[index]);
+  if(map->lista[index] != NULL){
+    if(strcmp(map->lista[index]->item->key, key)==0){
+      free(map->lista[index]->item->key);
+      map->lista[index]->item->value = 0;
+      free(map->lista[index]);
+      map->count--;
       return;
     } 
   }else{
+    printf("Item não existe\n");
     return;
   }
 }
 
 int hashmap_size(hashmap *map){
-  int cont = 0;
-  for (int i=0; i<map->capacity; i++){
-    if(map->items[i]!=NULL){
-      cont++;
-    }else{
-      continue;
-    }
-  }
-  
-  
-  return cont;
+  return map->count;  
 }
 
 void hashmap_delete(hashmap *map){
     
   for(int i=0; i<map->capacity; i++){
-    item* item = map->items[i];
+    lista_linkada* item = map->lista[i];
     if (item != NULL){
-      free(map->items[i]->key);
-      free(map->items[i]);
+      free(map->lista[i]->item->key);
+      map->lista[i]->item->value = 0;
+      free(map->lista[i]);
     }
   }
 
-  free(map->items);
+  free(map->lista);
   free(map);
 }
 
