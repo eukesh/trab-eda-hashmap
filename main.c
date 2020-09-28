@@ -32,18 +32,17 @@ int main() {
 
   hashmap *hash = hashmap_create(capacity);
 
-  printf("Inserindo lorem e 12\n");
+  printf("Inserindo %s, %s na tabela\n",vector[0],vector[3]);
   
   hashmap_set(hash, vector[0], 12);
-  printf("Verificando se a key consta");
-  int aux = hashmap_get(hash,vector[0]);
-  if(aux == 0){
-    printf("A key não consta no hash\n");
-  }else{
-    printf("valor da key %d\n",aux);
-  }
-  
+  hashmap_set(hash, vector[3], 24);
+  hashmap_set(hash, vector[4], 6545);
 
+  printf("Tamanho da tabela: %d \n",hashmap_size(hash));
+
+  hashmap_delete(hash);
   
+  printf("Tamanho da tabela: %d \n",hashmap_size(hash));
+
   return EXIT_SUCCESS;
 }

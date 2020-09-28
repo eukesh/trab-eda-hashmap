@@ -89,9 +89,9 @@ void hashmap_set(hashmap *map, const char *key, int value){
 }
 
 int hashmap_get(hashmap *map, const char *key){
-  int hash = elf_hash(key) % map->capacity;
+  int index = elf_hash(key) % map->capacity;
 
-  item* item =map->items[hash];
+  item* item = map->items[index];
 
   if(item != NULL){
     if(strcmp(item->key, key)==0){
@@ -101,3 +101,46 @@ int hashmap_get(hashmap *map, const char *key){
   return 0;
 
 }
+
+void hashmap_remove(hashmap *map, const char *key){
+  int index = elf_hash(key) % map->capacity;
+
+  if(map->items[index] != NULL){
+    if(strcmp(map->items[index]->key, key)==0){
+      free(map->items[index]->key);
+      free(map->items[index]);
+      return;
+    } 
+  }else{
+    return;
+  }
+}
+
+int hashmap_size(hashmap *map){
+  int cont = 0;
+  for (int i=0; i<map->capacity; i++){
+    if(map->items[i]!=NULL){
+      cont++;
+    }else{
+      continue;
+    }
+  }
+  
+  
+  return cont;
+}
+
+void hashmap_delete(hashmap *map){
+    
+  for(int i=0; i<map->capacity; i++){
+    item* item = map->items[i];
+    if (item != NULL){
+      free(map->items[i]->key);
+      free(map->items[i]);
+    }
+  }
+
+  free(map->items);
+  free(map);
+}
+
