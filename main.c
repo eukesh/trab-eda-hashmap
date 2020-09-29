@@ -12,42 +12,42 @@ int main() {
     "sit",
     "amet"
   };
-  //teste 
-  // Calcula quantidade de strings acima...
   const int length = sizeof vector / sizeof *vector;
-
-  // Por exemplo, se tivermos 512 buckets disponíveis...
   int capacity = 512;
-
-  //
-  for(int i = 0; i < length; i++) {
-    const char *s = vector[i];
-    int index = elf_hash(s) % capacity;
-    printf("%10s: %d\n", s, index);
-  }
-
-
-  
   printf("\n");
-
+  
   hashmap *hash = hashmap_create(capacity);
-
-  printf("Inserindo %s, %s, %sna tabela\n",vector[0],vector[3],vector[3]);
+  printf("----------------------------------\n");
+  for(int i=0;i<length;i++){
+    const char *p = vector[i];
+    int index = elf_hash(p) % capacity;
+    int value = 32;
+    printf("%s foi adicionado com hash %d\n",vector[i],index);
+    hashmap_set(hash,vector[i],value*2);
+  }
+  printf("----------------------------------");
+  printf("\n\tHases | keys | valor\n");
+  for(int i=0;i<length;i++){
+    const char *p = vector[i];
+    int index = elf_hash(p) % capacity;
+    printf("\t %d | %s | %d |\n",index,vector[i],hashmap_get(hash,vector[i]));
+  }
+  printf("----------------------------------\n");
+  printf("Tamanho da tabela hash %d\n\n",hashmap_size(hash));
+  if(hashmap_has(hash,vector[3]) == true)
+    printf("%s esta na tabela\n",vector[3]);
+  else
+    printf("%s nao esta na tabela\n",vector[3]);
+  printf("----------------------------------\n");
+  for(int i=0;i<length;i++){
+    const char *p = vector[i];
+    int index = elf_hash(p) % capacity;
+    printf("%s foi removido!\n",vector[i]);
+    hashmap_remove(hash,vector[i]);
+  }
+  printf("----------------------------------\n");
   
-  hashmap_set(hash, vector[0], 12);
-  hashmap_set(hash, vector[3], 24);
-  hashmap_set(hash, vector[4], 6545);
-
-  printf("Tamanho da tabela: %d \n",hashmap_size(hash));
-  printf("Valor da key %s e: %d \n",vector[3],hashmap_get(hash,vector[3]));
-
-  hashmap_remove(hash, vector[0]);
-  hashmap_remove(hash, vector[3]);
-  hashmap_remove(hash, vector[4]);
-  
-  hashmap_delete(hash);
-  
-  printf("Tamanho da tabela: %d \n",hashmap_size(hash));
+  void hashmap_delete(hashmap *map);
 
   return EXIT_SUCCESS;
 }

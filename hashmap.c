@@ -48,7 +48,9 @@ hashmap *hashmap_create(int capacity){
     
     for (int i=0; i<map->capacity; i++){
       map->lista[i] = NULL;
+      
     }
+  
     return map;
     }
 }
@@ -79,13 +81,23 @@ void hashmap_set(hashmap *map, const char *key, int value){
         map->lista[index] = new_item; 
         map->count++;
         
-    }else {
+    }else{
         //atualizar valor
         if (strcmp(map->lista[index]->item->key, key) == 0) {
-            map->lista[index]->item->value = value;
-            return;
+          map->lista[index]->item->value = value;
+          return;
         }else{
-          //colisao, tratar lista linkada
+          lista_linkada *temp = map->lista[index];
+          
+          do{
+            if(temp->next == NULL){
+              temp->next = (lista_linkada*) malloc (sizeof(lista_linkada));
+              map->lista[index]->next = new_item;
+              map->count++;
+              return;
+            }
+
+          }while(temp->next != NULL);
             
           return;
         }
@@ -93,31 +105,82 @@ void hashmap_set(hashmap *map, const char *key, int value){
   
 }
 
-int hashmap_get(hashmap *map, const char *key){
+bool hashmap_has(hashmap *map, const char *key) {
   int index = elf_hash(key) % map->capacity;
 
   lista_linkada* search = map->lista[index];
 
   if(search != NULL){
     if(strcmp(search->item->key, key)==0){
-      return search->item->value;
+      return true;
     }
+  }
+  return false;
+}
+int hashmap_get(hashmap *map, const char *key){
+  int index = elf_hash(key) % map->capacity;
+
+  lista_linkada* search = map->lista[index];
+  lista_linkada* temp = NULL;
+
+  int aux = 0;
+  if(search != NULL){
+    do{
+      if(strcmp(search->item->key, key)==0){
+        return search->item->value;
+        aux++;
+      }else if(search->next != NULL){
+        temp = search->next;
+        search = temp;
+      }else{
+        aux++;
+      }
+    }while(aux == 0) ;
   }
   return 0;
 
 }
-
+static item* linkedlist_remove(lista_linkada* lista) {
+    if (!lista)
+        return NULL;
+    if (!lista->next)
+        return NULL;
+    lista_linkada* node = lista->next;
+    lista_linkada* temp = lista;
+    temp->next = NULL;
+    lista = node;
+    item* aux = NULL;
+    memcpy(temp->item, aux, sizeof(item));
+    free(temp->item->key);
+    free(temp->item);
+    free(temp);
+    return aux;
+}
 void hashmap_remove(hashmap *map, const char *key){
   int index = elf_hash(key) % map->capacity;
-
-  if(map->lista[index] != NULL){
-    if(strcmp(map->lista[index]->item->key, key)==0){
-      free(map->lista[index]->item->key);
-      map->lista[index]->item->value = 0;
-      free(map->lista[index]);
-      map->count--;
-      return;
-    } 
+  
+  lista_linkada* search = map->lista[index];
+  lista_linkada* temp = NULL;
+  
+  int aux = 0;
+  
+  if(search != NULL){
+    do{
+      if(strcmp(search->item->key, key)==0){
+        temp = search;
+        search = search->next;
+        temp->next = NULL;
+        linkedlist_remove(temp);
+        map->lista[index] = search;
+        map->count--;
+        aux++;
+      }else if(search->next == NULL){
+        aux++;
+      }else{
+        temp = search->next;
+        search = temp;
+      }
+    }while(aux == 0);
   }else{
     printf("Item não existe\n");
     return;
@@ -129,16 +192,6 @@ int hashmap_size(hashmap *map){
 }
 
 void hashmap_delete(hashmap *map){
-    
-  for(int i=0; i<map->capacity; i++){
-    lista_linkada* item = map->lista[i];
-    if (item != NULL){
-      free(map->lista[i]->item->key);
-      map->lista[i]->item->value = 0;
-      free(map->lista[i]);
-    }
-  }
-
   free(map->lista);
   free(map);
 }
