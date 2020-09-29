@@ -50,6 +50,7 @@ Conforme discutido em sala, buckets podem ser implementados como listas linkadas
     void hashmap_delete(hashmap *map);
     ```
 
+
 ## Comparação de strings
 
 As funções precisam comparar chaves para tratar colisões. A função `strcmp()`, presente no arquivo `string.h` na bibliteca padrão do C pode ser usada para esse fim. A função recebe duas strings como argumentos, retornando zero se forem iguais. Caso o primeiro argumento seja maior que o segundo (em ordem alfabética), um número positivo é retornado, e, caso primeiro argumento seja menor que o segundo, um número negativo é retornado.
