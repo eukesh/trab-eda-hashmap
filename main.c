@@ -6,7 +6,7 @@
 Trabalho de EDA 
 Feito pelos alunos:
 Kashimann Luiz Lehmkuhl da Silva
-Mateus Ladeira
+Mateus Nepomuceno Ladeira
 */
 int main() {
   // Algumas strings para testarmos...
