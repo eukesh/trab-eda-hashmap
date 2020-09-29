@@ -10,6 +10,7 @@ typedef struct hashmap hashmap;
 typedef struct lista_linkada lista_linkada;
 
 hashmap *hashmap_create(int );
+
 void hashmap_set(hashmap *map, const char *key, int value);
 
 int hashmap_get(hashmap *map, const char *key);

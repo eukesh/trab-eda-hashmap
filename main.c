@@ -2,7 +2,12 @@
 #include <stdio.h>
 #include "hashmap.h"
 //
-
+/*
+Trabalho de EDA 
+Feito pelos alunos:
+Kashimann Luiz Lehmkuhl da Silva
+Mateus Ladeira
+*/
 int main() {
   // Algumas strings para testarmos...
   const char *vector[] = {

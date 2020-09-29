@@ -21,22 +21,26 @@ unsigned long elf_hash(const char *s){
   return h;
 }
 
+//struct de cada item
 typedef struct item{
   char *key;
   int value;
 }item;
 
+//struct da hash table
 typedef struct hashmap{
   lista_linkada** lista;
   int capacity;
   int count;
 }hashmap;
 
+//struct da lista linkada que compoe a hash
 typedef struct lista_linkada{
   item* item;
   lista_linkada* next;
 }lista_linkada;
 
+//funcao para criar o hash
 hashmap *hashmap_create(int capacity){
   if(capacity<1){
     return NULL;
@@ -55,6 +59,7 @@ hashmap *hashmap_create(int capacity){
     }
 }
 
+//funcao para adicionar um valor ao bucket
 void hashmap_set(hashmap *map, const char *key, int value){
     //criar item na tabela
     lista_linkada* new_item = (lista_linkada*) malloc (sizeof(lista_linkada));
@@ -87,6 +92,7 @@ void hashmap_set(hashmap *map, const char *key, int value){
           map->lista[index]->item->value = value;
           return;
         }else{
+          //tratando as colisoes, colocando no indicie next do struct lista_linkada
           lista_linkada *temp = map->lista[index];
           
           do{
@@ -105,6 +111,7 @@ void hashmap_set(hashmap *map, const char *key, int value){
   
 }
 
+//verficar se a key esta na hash
 bool hashmap_has(hashmap *map, const char *key) {
   int index = elf_hash(key) % map->capacity;
 
@@ -117,6 +124,8 @@ bool hashmap_has(hashmap *map, const char *key) {
   }
   return false;
 }
+
+//procurar uma key especifica
 int hashmap_get(hashmap *map, const char *key){
   int index = elf_hash(key) % map->capacity;
 
@@ -140,6 +149,11 @@ int hashmap_get(hashmap *map, const char *key){
   return 0;
 
 }
+
+/*
+Unica forma de remover o item que encontrei, utilizando uma lista linkada foi essa
+separando em outra funcao
+*/
 static item* linkedlist_remove(lista_linkada* lista) {
     if (!lista)
         return NULL;
@@ -156,6 +170,8 @@ static item* linkedlist_remove(lista_linkada* lista) {
     free(temp);
     return aux;
 }
+
+//remover a key do hash
 void hashmap_remove(hashmap *map, const char *key){
   int index = elf_hash(key) % map->capacity;
   
@@ -187,10 +203,12 @@ void hashmap_remove(hashmap *map, const char *key){
   }
 }
 
+//quantidade de itens no hash
 int hashmap_size(hashmap *map){
   return map->count;  
 }
 
+//deletar hash
 void hashmap_delete(hashmap *map){
   free(map->lista);
   free(map);
