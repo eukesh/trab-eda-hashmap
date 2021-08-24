@@ -1,4 +1,9 @@
 # Estrutura de Dados - Trabalho Final
+
+Atividades e listas desenvolvidas na disciplina Estrutura de Dados do professor Paulo Henrique Torrens na UDESC 
+
+* Plágio é crime e é passível de processo acadêmico.
+
   
 O aluno deve implementar um tipo de dados abstrato para uma [tabela hash](https://en.wikipedia.org/wiki/Hash_table) (também conhecido como dicionário). Conforme visto em sala, tabelas hash são estruturas de dados associativas, isto é, associam uma chave a um valor, com busca, inserção e remoção eficientes (com o melhor tempo constante).
 
